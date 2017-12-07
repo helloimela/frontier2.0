@@ -2,6 +2,16 @@ var app = angular.module('frontier', [
   'ngRoute', 'ngAnimate', 'ngSanitize','pubnub.angular.service'
 ]);
 
+
+// TODO:
+// 1. reset total influence on shared screen to 0 every turn
+// 2. show - hide ready button in join.html for each player's action
+// 3. change number of player on shared screen (right now it shows -1)
+// 4. run motion only run if 2nd player press the ready button first
+// 5. after clicked "continue" in join.html >> something should happen on the shared screen
+//    (total influences reset to 0, and displays global information)      
+// 6. if players are ready for the 2nd time, run turn 2
+
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider
     // Home
@@ -170,7 +180,7 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
   
   $scope.runMotion = function(){
-    console.log('run motion')
+    console.log('run motion');
     $scope.turnCounter += 1;
     $scope.turnSession = true;
   };
@@ -198,6 +208,7 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
   $scope.countInfluence = function(num){
     $scope.totalInfluences+=parseInt(num);
+    console.log($scope.totalInfluences);
     console.log($scope.votes);
 
     if($scope.votes.length<2){
@@ -205,6 +216,8 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     } else if($scope.votes.length==2){
         $scope.votingStatus = true;
     }
+
+    if($scope.turnSession==false){$scope.totalInfluences = 0;}
   // endof countInfluence()  
   };
 
@@ -212,7 +225,8 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
     $scope.speciesVal+=1;
     $scope.turnSession = false;
-
+    $scope.totalInfluences = 0;
+    $scope.influences=0;
   // endof finishMotion()  
   };
 
