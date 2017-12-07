@@ -2,6 +2,7 @@
 
     <h1>Species </h1>
     <p>[Species profile HERE! Awesome lalalala]</p>
+    <p>Value number {{speciesVal}}</p>
 
     <form ng-hide="joinTrue" ng-submit="joinGame()">
       <input ng-model="gameId" type="text" placeholder="Enter Game ID" />
@@ -12,17 +13,36 @@
     <div class="col-sm-12" ng-show="joinTrue">
          <form ng-submit="sendMessage()">
            <input ng-hide="true" ng-model="readyState" type="text" placeholder="Type your message" ng-value="readyState"/>
-           <button type="submit">I'm Ready!</button>
+           <button type="submit" ng-hide="turnSession">I'm Ready!</button>
           </form>
-
-          <ul class="col-sm-12">
-               <li ng-repeat="message in messages">
-                 <span class="title">#{{ message.sender_uuid }}</span>
-                 <p>{{ message.date | date:"MM/dd/yyyy 'at' h:mma"}}</br> {{ message.content }}</p>
-               </li>
-          </ul> 
     </div>
+
+    <div class="col-sm-12" ng-show="turnSession">
+      <p>Turn {{turnCounter}}</p>
+      <form ng-submit="sendVote()">
+          <input ng-model="influences" type="text" placeholder="Add influences"/>
+          <button type="submit">Send my vote</button>
+      </form>
+      <p ng-hide="votingStatus">Waiting for another player</p>
+      <div ng-show="votingStatus">
+
+        <form ng-submit="finishMotion()">
+          <button type="submit">Continue</button>
+        </form>
+
+      </div>
+
+    </div>
+
 </div>
 
+
+
+<!-- <ul class="col-sm-12">
+     <li ng-repeat="message in messages">
+       <span class="title">#{{ message.sender_uuid }}</span>
+       <p>{{ message.date | date:"MM/dd/yyyy 'at' h:mma"}}</br> {{ message.content }}</p>
+     </li>
+</ul>  -->
 
 

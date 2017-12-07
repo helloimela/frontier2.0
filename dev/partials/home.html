@@ -14,6 +14,12 @@
 
 		<h4>Turn {{turnCounter}}</h4>
 	</div>
+
+	<div class="col-sm-12">
+		<p ng-hide="votes.length==2">Voting process ....</p>
+		<p ng-show="votes.length==2">Total Influences: <span>{{totalInfluences}}</span></p>
+	</div>
+
 </div>
 
 

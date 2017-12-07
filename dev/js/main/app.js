@@ -6,8 +6,7 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
   $routeProvider
     // Home
     .when("/", {templateUrl: "partials/home.html"})
-    .when("/join", {templateUrl: "partials/join.html"})
-    .when("/play/:gameId", {templateUrl: "partials/play.html"});
+    .when("/join", {templateUrl: "partials/join.html"});
     // Pages
 
     $locationProvider.html5Mode({
@@ -33,6 +32,9 @@ app.controller('MainCtrl', ['$sce','$http','$scope','$location','$rootScope','$w
 app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
   $scope.messages = [];
   $scope.presences = [];
+  $scope.votes = [];
+  $scope.speciesVal = 1;
+  $scope.totalInfluences = 0;
   $scope.startGame = function(){
     $scope.rand = Math.floor(Math.random() * 10000) + 1000;
     $scope.channel = 'game-'+$scope.rand;
@@ -58,10 +60,16 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     // Listening to the callbacks
     $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
        $scope.$apply(function () {
-           $scope.messages.push(m);
-           console.log($scope.messages.length);
-           if($scope.messages.length >=2){
-            $scope.runMotion();
+           if(m.type=='state'){
+              $scope.messages.push(m);
+              console.log($scope.messages.length);
+              if($scope.messages.length >=2){
+               $scope.runMotion();
+              } 
+           } else if(m.type=='vote'){
+              $scope.votes.push(m);
+              // !!!! clear votes[] each turn
+              $scope.countInfluence(m.content);
            }
        });
     });
@@ -112,11 +120,18 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     // Listening to the callbacks
     $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
        $scope.$apply(function () {
-           $scope.messages.push(m);
-           console.log($scope.messages.length);
-           if($scope.messages.length >=2){
-            $scope.runMotion();
+           if(m.type=='state'){
+              $scope.messages.push(m);
+              console.log($scope.messages.length);
+              if($scope.messages.length >=2){
+               $scope.runMotion();
+              } 
+           } else if(m.type=='vote'){
+              $scope.votes.push(m);
+              // !!!! clear votes[] each turn
+              $scope.countInfluence(m.content);
            }
+
        });
     });
     $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel), function(ngEvent, presenceEvent) {
@@ -134,16 +149,13 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
   };
 
   $scope.sendMessage = function() {
-    // // Don't send an empty message 
-    // if (!$scope.readyState || $scope.readyState === '') {
-    //   return;
-    // }
     $scope.readyState=true;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
              content: $scope.readyState,
              sender_uuid: $scope.uuid,
+             type:'state',
              date: new Date()
          },
          callback: function(m) {
@@ -159,7 +171,49 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
   
   $scope.runMotion = function(){
     console.log('run motion')
-    $scope.turnCounter = 1;
+    $scope.turnCounter += 1;
+    $scope.turnSession = true;
+  };
+
+
+  // VOTING
+  $scope.influences='';
+  $scope.votingStatus = '';
+  $scope.sendVote = function(){
+
+    Pubnub.publish({
+         channel: $scope.channel,
+         message: {
+             content: $scope.influences,
+             sender_uuid: $scope.uuid,
+             type:'vote',
+             date: new Date()
+         },
+         callback: function(m) {
+             // console.log(m);
+         }
+    });
+  // endof sendVote()
+  };
+
+  $scope.countInfluence = function(num){
+    $scope.totalInfluences+=parseInt(num);
+    console.log($scope.votes);
+
+    if($scope.votes.length<2){
+        $scope.votingStatus = false;
+    } else if($scope.votes.length==2){
+        $scope.votingStatus = true;
+    }
+  // endof countInfluence()  
+  };
+
+  $scope.finishMotion = function(){
+
+    $scope.speciesVal+=1;
+    $scope.turnSession = false;
+
+  // endof finishMotion()  
   };
 
 
@@ -171,40 +225,6 @@ app.controller('JoinCtrl',['$rootScope','$scope','Pubnub','$location',function($
 // endof JoinCtrl
 }]);
 
-app.controller('PlayCtrl',['$routeParams','$rootScope','$scope','Pubnub','$location',function($routeParams,$rootScope,$scope,Pubnub,$location){
-  $scope.channel = 'game-'+$routeParams.gameId;
-  $scope.sendMessage = function() {
-    // Don't send an empty message 
-    if (!$scope.messageContent || $scope.messageContent === '') {
-      return;
-    }
-    Pubnub.publish({
-         channel: $scope.channel,
-         message: {
-             content: $scope.messageContent,
-             sender_uuid: $scope.uuid,
-             date: new Date()
-         },
-         callback: function(m) {
-             console.log(m);
-         }
-    });
-    // Reset the messageContent input
-    $scope.messageContent = '';
-
-  };
-
-  $rootScope.messages = [];
-
-  // Listening to the callbacks
-  $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
-     $scope.$apply(function () {
-         $rootScope.messages.push(m);
-     });
-  });
-
-// endof PlayCtrl
-}]);
 
 app.controller('HomeCtrl', ['$http','$location','$scope',function($http, $location, $scope, $rootScope){
 
