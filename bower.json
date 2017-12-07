@@ -1,0 +1,36 @@
+{
+  "name": "frontier",
+  "description": "Collaborative competitive game",
+  "main": "index.html",
+  "authors": [
+    "elayudhanira@gmail.com"
+  ],
+  "license": "ISC",
+  "homepage": "",
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "devDependencies": {
+    "angular": "^1.6.2",
+    "angular-ui-router": "^0.4.2",
+    "jquery": "^3.1.1",
+    "pubnub": "^4.19.0",
+    "pubnub-angular": "^4.0.3"
+  },
+  "overrides": {
+    "angular": {
+      "main": "./dev/js/vendor/angular/angular.min.js"
+    },
+    "angular-ui-router": {
+      "main": "./dev/js/vendor/angular-ui-router/release/angular-ui-router.min.js"
+    },
+    "jquery": {
+      "main": "./dev/js/vendor/jquery/dist/jquery.min.js"
+    }
+  }
+}

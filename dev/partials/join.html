@@ -1,0 +1,27 @@
+<div class="col-sm-12" ng-controller="GameCtrl">
+
+    <h1>Species </h1>
+
+    <form ng-hide="joinTrue" ng-submit="joinGame()">
+      <input ng-model="gameId" type="text" placeholder="Enter Game ID" />
+      <button type="submit">Join</button>
+    </form>
+
+
+    <div class="col-sm-12" ng-show="joinTrue">
+         <form ng-submit="sendMessage()">
+           <input ng-model="messageContent" type="text" placeholder="Type your message" />
+           <button type="submit">Send</button>
+          </form>
+
+          <ul class="col-sm-12">
+               <li ng-repeat="message in messages">
+                 <span class="title">Anonymous robot #{{ message.sender_uuid }}</span>
+                 <p>{{ message.date | date:"MM/dd/yyyy 'at' h:mma"}}</br> {{ message.content }}</p>
+               </li>
+          </ul> 
+    </div>
+</div>
+
+
+
