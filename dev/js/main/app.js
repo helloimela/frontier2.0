@@ -59,6 +59,10 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
        $scope.$apply(function () {
            $scope.messages.push(m);
+           console.log($scope.messages.length);
+           if($scope.messages.length >=2){
+            $scope.runMotion();
+           }
        });
     });
 
@@ -68,8 +72,8 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
        });
     });
 
-    console.log($scope.messages);
-    console.log($scope.presences);
+    // console.log($scope.messages);
+    // console.log($scope.presences);
 
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
@@ -79,6 +83,8 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
   // endof startGame  
   };
+
+  $scope.turnCounter=0;
 
   $scope.gameId = "";
   $scope.joinGame = function(){
@@ -107,6 +113,10 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     $scope.$on(Pubnub.getMessageEventNameFor($scope.channel), function (ngEvent, m) {
        $scope.$apply(function () {
            $scope.messages.push(m);
+           console.log($scope.messages.length);
+           if($scope.messages.length >=2){
+            $scope.runMotion();
+           }
        });
     });
     $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel), function(ngEvent, presenceEvent) {
@@ -114,40 +124,44 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
            $scope.presences.push(presenceEvent);
        });
     });
-    console.log($scope.messages);
-    console.log($scope.presences);
+    // console.log($scope.messages);
+    // console.log($scope.presences);
 
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
-      console.log(presenceEvent);
+      // console.log(presenceEvent);
     };
   };
 
-
   $scope.sendMessage = function() {
-    // Don't send an empty message 
-    if (!$scope.messageContent || $scope.messageContent === '') {
-      return;
-    }
+    // // Don't send an empty message 
+    // if (!$scope.readyState || $scope.readyState === '') {
+    //   return;
+    // }
+    $scope.readyState=true;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
-             content: $scope.messageContent,
+             content: $scope.readyState,
              sender_uuid: $scope.uuid,
              date: new Date()
          },
          callback: function(m) {
-             console.log(m);
+             // console.log(m);
          }
     });
     // Reset the messageContent input
-    $scope.messageContent = '';
-
+    $scope.readyState = '';
     
   // endof sendMessage
   };
 
   
+  $scope.runMotion = function(){
+    console.log('run motion')
+    $scope.turnCounter = 1;
+  };
+
 
 // endof GameCtrl  
 }]);

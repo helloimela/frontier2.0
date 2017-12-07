@@ -5,18 +5,24 @@
 	<div class="col-sm-12" ng-show="hideStartGame">
 		<p>Game ID: {{rand}}</p>
 		<p>Enter the game ID on your phone</p>
-		<ul>
-			<li ng-repeat="pr in presences">
-				<p>{{pr.occupancy}}</p>
-			</li>
-		</ul>
+		<p>{{presences[presences.length-1].occupancy-1}} players online</p>
 	</div>
-	<div class="col-sm-12">
+
+	<div class="col-sm-12" ng-show="messages.length>=2"> 
+		<!-- if players more than 2, change to messages.length >= pr.occupancy -->
+		<p>Everyone is ready!</p>
+
+		<h4>Turn {{turnCounter}}</h4>
+	</div>
+</div>
+
+
+
+	<!-- <div class="col-sm-12">
 		<ul class="col-sm-12">
            <li ng-repeat="message in messages">
-             <span class="title">Anonymous robot #{{ message.sender_uuid }}</span>
+             <span class="title">#{{ message.sender_uuid }}</span>
              <p>{{ message.date | date:"MM/dd/yyyy 'at' h:mma"}}</br> {{ message.content }}</p>
            </li>
       </ul> 
-	</div>
-</div>
+	</div> -->
