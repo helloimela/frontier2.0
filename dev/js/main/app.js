@@ -4,13 +4,21 @@ var app = angular.module('frontier', [
 
 
 // TODO:
-// 1. reset total influence on shared screen to 0 every turn
-// 2. show - hide ready button in join.html for each player's action
-// 3. change number of player on shared screen (right now it shows -1)
-// 4. run motion only run if 2nd player press the ready button first
-// 5. after clicked "continue" in join.html >> something should happen on the shared screen
-//    (total influences reset to 0, and displays global information)      
-// 6. if players are ready for the 2nd time, run turn 2
+// 1. reset total influence on shared screen to 0 every turn (DONE)
+// 2. show - hide ready button in join.html for each player's action (DONE)
+// 3. change number of player on shared screen (right now it shows -1) (DONE)
+// 4. run motion only run if 2nd player press the ready button first (DONE)
+// 5. after clicked "continue" in join.html >> something should happen on the shared screen (DONE)
+//    (total influences reset to 0, and displays global information) (DONE) 
+// 6. if players are ready for the 2nd time, run turn 2 (DONE)
+// 7. Firebase
+// 8. move the species,motions json files and update the value
+// 9. [Home.html] Turn 2 : total influences displays when 1 player vote
+// 10. [join.html] Species value increase everytime one plyer click "continue" button
+// 11. [join.html] "Continue" button shows up even before player submit vote
+// 12. If players reach TURN 5, shows final result, and WINNER ??????
+//      Convert stats into scores (?)
+// 13. Style the pages
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider
@@ -39,12 +47,14 @@ app.controller('MainCtrl', ['$sce','$http','$scope','$location','$rootScope','$w
 
 }]);
 
-app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
+app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$scope,Pubnub){
   $scope.messages = [];
   $scope.presences = [];
   $scope.votes = [];
+  $scope.playerTurns=[];
   $scope.speciesVal = 1;
   $scope.totalInfluences = 0;
+  $rootScope.numPlayers=0;
   $scope.startGame = function(){
     $scope.rand = Math.floor(Math.random() * 10000) + 1000;
     $scope.channel = 'game-'+$scope.rand;
@@ -73,13 +83,21 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
            if(m.type=='state'){
               $scope.messages.push(m);
               console.log($scope.messages.length);
-              if($scope.messages.length >=2){
+              if($scope.messages.length%2==0){
                $scope.runMotion();
               } 
            } else if(m.type=='vote'){
               $scope.votes.push(m);
               // !!!! clear votes[] each turn
               $scope.countInfluence(m.content);
+           } else if(m.type=='endTurn'){
+              $scope.playerTurns.push(m);
+              if($scope.playerTurns.length%2==0){
+                $scope.turnSession = false;
+                $scope.speciesVal+=1;
+              }
+              
+              // empty the votes
            }
        });
     });
@@ -95,6 +113,7 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
+      $scope.$apply();
       console.log(presenceEvent);
       console.log($scope.presences);
     };
@@ -107,6 +126,8 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
   $scope.gameId = "";
   $scope.joinGame = function(){
     console.log('click');
+    $rootScope.numPlayers+=1;
+    // $scope.numPlayers.$apply();
     $scope.joinTrue = true;
     $scope.channel = 'game-'+$scope.gameId;
 
@@ -133,13 +154,20 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
            if(m.type=='state'){
               $scope.messages.push(m);
               console.log($scope.messages.length);
-              if($scope.messages.length >=2){
+              if($scope.messages.length%2==0){
                $scope.runMotion();
               } 
            } else if(m.type=='vote'){
               $scope.votes.push(m);
               // !!!! clear votes[] each turn
               $scope.countInfluence(m.content);
+           } else if(m.type=='endTurn'){
+              $scope.playerTurns.push(m);
+              if($scope.playerTurns.length%2==0){
+                $scope.turnSession = false;
+                $scope.speciesVal+=1;
+              }
+              
            }
 
        });
@@ -154,7 +182,9 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
 
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
+      $scope.$apply();
       // console.log(presenceEvent);
+      // console.log($scope.presences);
     };
   };
 
@@ -183,6 +213,7 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     console.log('run motion');
     $scope.turnCounter += 1;
     $scope.turnSession = true;
+    $scope.totalInfluences = 0;
   };
 
 
@@ -211,6 +242,7 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
     console.log($scope.totalInfluences);
     console.log($scope.votes);
 
+    // votingStatus = if both players already vote
     if($scope.votes.length<2){
         $scope.votingStatus = false;
     } else if($scope.votes.length==2){
@@ -224,10 +256,25 @@ app.controller('GameCtrl',['$scope','Pubnub',function($scope,Pubnub){
   $scope.finishMotion = function(){
 
     $scope.speciesVal+=1;
+    // turn session = if both players are ready
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
     $scope.influences=0;
-  // endof finishMotion()  
+    
+    Pubnub.publish({
+         channel: $scope.channel,
+         message: {
+             content: 'something',
+             sender_uuid: $scope.uuid,
+             type:'endTurn',
+             date: new Date()
+         },
+         callback: function(m) {
+             // console.log(m);
+         }
+    });
+
+  // endof finishMotion()
   };
 
 

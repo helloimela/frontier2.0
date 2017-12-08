@@ -5,19 +5,24 @@
 	<div class="col-sm-12" ng-show="hideStartGame">
 		<p>Game ID: {{rand}}</p>
 		<p>Enter the game ID on your phone</p>
-		<p>{{presences[presences.length-1].occupancy-1}} players online</p>
+		<!-- <p>{{presences[presences.length-1].occupancy}} players online</p> -->
+		<p ng-if="presences.length>0">{{presences.length-1}} players online</p>
 	</div>
 
-	<div class="col-sm-12" ng-show="messages.length>=2"> 
+	<div class="col-sm-12" ng-show="presences.length==3">
+		<p>Show Global Data</p>
+		<p>Species Value: {{speciesVal}}</p>
+	</div>
+
+	<div class="col-sm-12" ng-show="turnSession"> 
 		<!-- if players more than 2, change to messages.length >= pr.occupancy -->
 		<p>Everyone is ready!</p>
 
 		<h4>Turn {{turnCounter}}</h4>
-	</div>
 
-	<div class="col-sm-12">
 		<p ng-hide="votingStatus">Voting process ....</p>
 		<p ng-show="votingStatus">Total Influences: <span>{{totalInfluences}}</span></p>
+
 	</div>
 
 </div>
