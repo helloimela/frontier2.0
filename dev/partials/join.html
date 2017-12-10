@@ -20,7 +20,7 @@
     <div class="col-sm-12" ng-show="turnSession">
       <!-- TODO : shows everytime player click ready -->
       <p>Turn {{turnCounter}}</p>
-      <form ng-submit="sendVote()">
+      <form ng-submit="sendVote()" ng-hide="submitted">
           <input ng-model="influences" type="text" placeholder="Add influences"/>
           <button type="submit">Send my vote</button>
       </form>

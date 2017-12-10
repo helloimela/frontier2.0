@@ -214,13 +214,17 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
     $scope.turnCounter += 1;
     $scope.turnSession = true;
     $scope.totalInfluences = 0;
+    $scope.submitted = false;
   };
 
 
   // VOTING
   $scope.influences='';
   $scope.votingStatus = '';
+  $scope.submitted = false;
   $scope.sendVote = function(){
+    $scope.submitted = true;
+    console.log($scope.submitted);
 
     Pubnub.publish({
          channel: $scope.channel,
@@ -243,9 +247,9 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
     console.log($scope.votes);
 
     // votingStatus = if both players already vote
-    if($scope.votes.length<2){
+    if($scope.votes.length%2!=0){
         $scope.votingStatus = false;
-    } else if($scope.votes.length==2){
+    } else {
         $scope.votingStatus = true;
     }
 
