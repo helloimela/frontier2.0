@@ -13,9 +13,9 @@ var app = angular.module('frontier', [
 // 6. if players are ready for the 2nd time, run turn 2 (DONE)
 // 7. Firebase
 // 8. move the species,motions json files and update the value
-// 9. [Home.html] Turn 2 : total influences displays when 1 player vote
-// 10. [join.html] Species value increase everytime one plyer click "continue" button
-// 11. [join.html] "Continue" button shows up even before player submit vote
+// 9. [Home.html] Turn 2 : total influences displays when 1 player vote (DONE)
+// 10. [join.html] Species value increase everytime one plyer click "continue" button (DONE)
+// 11. [join.html] "Continue" button shows up even before player submit vote (DONE)
 // 12. If players reach TURN 5, shows final result, and WINNER ??????
 //      Convert stats into scores (?)
 // 13. Style the pages
@@ -215,6 +215,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
     $scope.turnSession = true;
     $scope.totalInfluences = 0;
     $scope.submitted = false;
+    $scope.votingStatus = false;
   };
 
 
@@ -258,8 +259,6 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
   };
 
   $scope.finishMotion = function(){
-
-    $scope.speciesVal+=1;
     // turn session = if both players are ready
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
