@@ -21,7 +21,9 @@
 		<h4>Turn {{turnCounter}}</h4>
 
 		<p ng-hide="votingStatus">Voting process ....</p>
-		<p ng-show="votingStatus">Total Influences: <span>{{totalInfluences}}</span></p>
+		<h4 ng-show="votingStatus">Results</h4>
+		<p ng-show="votingStatus">Motion 1: <span>{{totalInfluences}}.</span> {{motionStatus}}</p>
+		<p ng-show="votingStatus">Motion 2: <span>{{totalInfluences2}}.</span> {{motionStatus2}}</p>
 
 	</div>
 

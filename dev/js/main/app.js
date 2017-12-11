@@ -49,6 +49,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   $scope.playerTurns=[];
   $scope.speciesVal = 1;
   $scope.totalInfluences = 0;
+  $scope.totalInfluences2 = 0;
   $rootScope.numPlayers=0;
 
   $scope.startGame = function(){
@@ -102,7 +103,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
            } else if(m.type=='vote'){
               $scope.votes.push(m);
               // !!!! clear votes[] each turn
-              $scope.countInfluence(m.content);
+              $scope.countInfluence(m.content, m.content2);
            } else if(m.type=='endTurn'){
               $scope.playerTurns.push(m);
               if($scope.playerTurns.length%2==0){
@@ -183,7 +184,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
            } else if(m.type=='vote'){
               $scope.votes.push(m);
               // !!!! clear votes[] each turn
-              $scope.countInfluence(m.content);
+              $scope.countInfluence(m.content, m.content2);
            } else if(m.type=='endTurn'){
               $scope.playerTurns.push(m);
               if($scope.playerTurns.length%2==0){
@@ -314,6 +315,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.turnCounter += 1;
     $scope.turnSession = true;
     $scope.totalInfluences = 0;
+    $scope.totalInfluences2 = 0;
     $scope.submitted = false;
   };
 
@@ -342,8 +344,19 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   // endof sendVote()
   };
 
-  $scope.countInfluence = function(num){
+  $scope.countInfluence = function(num, num2){
     $scope.totalInfluences+=parseInt(num);
+    $scope.totalInfluences2+=parseInt(num2);
+    if ($scope.totalInfluences>=5) {
+      $scope.motionStatus = 'PASSED!';
+    } else {
+      $scope.motionStatus = 'FAILED!';
+    }
+    if ($scope.totalInfluences2>=5) {
+      $scope.motionStatus2 = 'PASSED!';
+    } else {
+      $scope.motionStatus2 = 'FAILED!';
+    }
     console.log($scope.totalInfluences);
     console.log($scope.votes);
 
@@ -354,7 +367,10 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
         $scope.votingStatus = true;
     }
 
-    if($scope.turnSession==false){$scope.totalInfluences = 0;}
+    if($scope.turnSession==false){
+      $scope.totalInfluences = 0;
+      $scope.totalInfluences2 = 0;
+    }
   // endof countInfluence()  
   };
 
@@ -364,6 +380,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     // turn session = if both players are ready
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
+    $scope.totalInfluences2 = 0;
     $scope.influences=0;
     $scope.influences2=0;
     Pubnub.publish({
