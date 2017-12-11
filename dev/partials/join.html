@@ -20,10 +20,49 @@
     <div class="col-sm-12" ng-show="turnSession">
       <!-- TODO : shows everytime player click ready -->
       <p>Turn {{turnCounter}}</p>
-      <form ng-submit="sendVote()" ng-hide="submitted">
-          <input ng-model="influences" type="text" placeholder="Add influences"/>
-          <button type="submit">Send my vote</button>
-      </form>
+          <div class="flex-container flex-0 prop-box">
+          <div class="box flex-5 inside-box inside-no-corner">
+              <p>Motion 1</p>
+              <ul>
+                <li>Topic: {{itemDetail.topic}}</li>
+                <li>Type: {{itemDetail.type}}</li>
+              </ul>
+              <ul>
+                <li ng-hide="effects.land==0">Land: {{effects.land}}</li>
+                <li ng-hide="effects.population==0">Population: {{effects.population}}</li>
+                <li ng-hide="effects.energy==0">Energy: {{effects.energy}}</li>
+                <li ng-hide="effects.food==0">Food: {{effects.food}}</li>
+              </ul>
+              <strong>Influence Required: {{effects.influence_required}}</strong>
+            </div>
+            <div class="flex-1">
+              <button ng-click="addInfluence(1)">+</button>
+              <p>{{ influences }}</p>
+              <button ng-click="removeInfluence(1)">-</button>
+            </div>
+          </div>
+          <div class="flex-container flex-0 prop-box">
+          <div class="box flex-5 inside-box inside-no-corner">
+              <p>Motion 2</p>
+              <ul>
+                <li>Topic: {{itemDetail2.topic}}</li>
+                <li>Type: {{itemDetail2.type}}</li>
+              </ul>
+              <ul>
+                <li ng-hide="effects.land==0">Land: {{effects2.land}}</li>
+                <li ng-hide="effects.population==0">Population: {{effects2.population}}</li>
+                <li ng-hide="effects.energy==0">Energy: {{effects2.energy}}</li>
+                <li ng-hide="effects.food==0">Food: {{effects2.food}}</li>
+              </ul>
+              <strong>Influence Required: {{effects2.influence_required}}</strong>
+            </div>
+            <div class="flex-1">
+              <button ng-click="addInfluence(2)">+</button>
+              <p>{{ influences2 }}</p>
+              <button ng-click="removeInfluence(2)">-</button>
+            </div>
+            <button ng-click="sendVote()" ng-hide="submitted">Send my vote</button>
+          </div>
       <p ng-hide="votingStatus">Waiting for another player</p>
       <div ng-show="votingStatus">
 

@@ -190,6 +190,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
 
   $scope.sendMessage = function() {
     $scope.readyState=true;
+    $scope.myInfluence = 5;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
@@ -208,6 +209,38 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
   // endof sendMessage
   };
 
+  $scope.addInfluence = function(motion) {
+    if (motion == 1) {
+       if ($scope.myInfluence >= Math.abs($scope.influences+1)+Math.abs($scope.influences2)) {
+        $scope.influences = $scope.influences + 1;
+       } else {
+        console.log('Not enough influence! Current value '+ $scope.myInfluence);
+       }
+     } else if (motion == 2) {
+         if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2+1)) {
+          $scope.influences2 = $scope.influences2 + 1;
+         } else {
+          console.log('Not enough influence! Current value '+ $scope.myInfluence);
+         }
+     }
+
+  };
+  
+  $scope.removeInfluence = function(motion) {
+    if (motion == 1) {
+       if ($scope.myInfluence >= Math.abs($scope.influences-1)+Math.abs($scope.influences2)) {
+        $scope.influences = $scope.influences - 1;
+       } else {
+        console.log('Not enough influence! Current value '+ $scope.myInfluence);
+       }
+     } else if (motion == 2) {
+         if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2-1)) {
+          $scope.influences2 = $scope.influences2 - 1;
+         } else {
+          console.log('Not enough influence! Current value '+ $scope.myInfluence);
+         }
+     }
+  };
   
   $scope.runMotion = function(){
     console.log('run motion');
@@ -219,7 +252,8 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
 
 
   // VOTING
-  $scope.influences='';
+  $scope.influences= 0;
+  $scope.influences2= 0;
   $scope.votingStatus = '';
   $scope.submitted = false;
   $scope.sendVote = function(){
@@ -229,6 +263,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
          channel: $scope.channel,
          message: {
              content: $scope.influences,
+             content2: $scope.influences2,
              sender_uuid: $scope.uuid,
              type:'vote',
              date: new Date()
@@ -263,7 +298,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
     $scope.influences=0;
-    
+    $scope.influences2=0;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
