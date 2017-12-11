@@ -14,8 +14,8 @@ var app = angular.module('frontier', [
 // 7. Firebase
 // 8. move the species,motions json files and update the value
 // 9. [Home.html] Turn 2 : total influences displays when 1 player vote (DONE)
-// 10. [join.html] Species value increase everytime one plyer click "continue" button (DONE)
-// 11. [join.html] "Continue" button shows up even before player submit vote (DONE)
+// 10. [join.html] Species value increase everytime one plyer click "continue" button
+// 11. [join.html] "Continue" button shows up even before player submit vote
 // 12. If players reach TURN 5, shows final result, and WINNER ??????
 //      Convert stats into scores (?)
 // 13. Style the pages
@@ -257,6 +257,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
 
   $scope.sendMessage = function() {
     $scope.readyState=true;
+    $scope.myInfluence = 5;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
@@ -275,6 +276,38 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   // endof sendMessage
   };
 
+  $scope.addInfluence = function(motion) {
+    if (motion == 1) {
+       if ($scope.myInfluence >= Math.abs($scope.influences+1)+Math.abs($scope.influences2)) {
+        $scope.influences = $scope.influences + 1;
+       } else {
+        console.log('Not enough influence! Current value '+ $scope.myInfluence);
+       }
+     } else if (motion == 2) {
+         if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2+1)) {
+          $scope.influences2 = $scope.influences2 + 1;
+         } else {
+          console.log('Not enough influence! Current value '+ $scope.myInfluence);
+         }
+     }
+
+  };
+  
+  $scope.removeInfluence = function(motion) {
+    if (motion == 1) {
+       if ($scope.myInfluence >= Math.abs($scope.influences-1)+Math.abs($scope.influences2)) {
+        $scope.influences = $scope.influences - 1;
+       } else {
+        console.log('Not enough influence! Current value '+ $scope.myInfluence);
+       }
+     } else if (motion == 2) {
+         if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2-1)) {
+          $scope.influences2 = $scope.influences2 - 1;
+         } else {
+          console.log('Not enough influence! Current value '+ $scope.myInfluence);
+         }
+     }
+  };
   
   $scope.runMotion = function(){
     console.log('run motion');
@@ -282,22 +315,22 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.turnSession = true;
     $scope.totalInfluences = 0;
     $scope.submitted = false;
-    $scope.votingStatus = false;
   };
 
 
   // VOTING
-  $scope.influences='';
+  $scope.influences= 0;
+  $scope.influences2= 0;
   $scope.votingStatus = '';
   $scope.submitted = false;
   $scope.sendVote = function(){
+    //hide form after submission to prevent voting more than once per turn
     $scope.submitted = true;
-    console.log($scope.submitted);
-
     Pubnub.publish({
          channel: $scope.channel,
          message: {
              content: $scope.influences,
+             content2: $scope.influences2,
              sender_uuid: $scope.uuid,
              type:'vote',
              date: new Date()
@@ -326,11 +359,13 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   };
 
   $scope.finishMotion = function(){
+
+    $scope.speciesVal+=1;
     // turn session = if both players are ready
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
     $scope.influences=0;
-    
+    $scope.influences2=0;
     Pubnub.publish({
          channel: $scope.channel,
          message: {
