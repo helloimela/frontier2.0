@@ -13,7 +13,7 @@ var app = angular.module('frontier', [
 // 6. if players are ready for the 2nd time, run turn 2 (DONE)
 // 7. Firebase
 // 8. move the species,motions json files and update the value
-// 9. [Home.html] Turn 2 : total influences displays when 1 player vote
+// 9. [Home.html] Turn 2 : total influences displays when 1 player vote (DONE)
 // 10. [join.html] Species value increase everytime one plyer click "continue" button
 // 11. [join.html] "Continue" button shows up even before player submit vote
 // 12. If players reach TURN 5, shows final result, and WINNER ??????
@@ -223,9 +223,8 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
   $scope.votingStatus = '';
   $scope.submitted = false;
   $scope.sendVote = function(){
+    //hide form after submission to prevent voting more than once per turn
     $scope.submitted = true;
-    console.log($scope.submitted);
-
     Pubnub.publish({
          channel: $scope.channel,
          message: {
