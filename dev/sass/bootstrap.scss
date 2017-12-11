@@ -68,7 +68,7 @@
 
 html,body, body>div, .container{
 	height: 100%;
-	color: $gray-dark;
+	color: $text-color;
 	position: relative;
 }
 body>div{
@@ -79,6 +79,15 @@ body>div{
 a{
 	cursor: pointer;
 	&:hover{text-decoration: none;}
+}
+form{
+	input[type="text"]{
+		color: $gray-dark;
+	}
+	.fr-input{
+		background: $brand-light-aqua;
+		border:2px solid $gray-dark;
+	}
 }
 
 

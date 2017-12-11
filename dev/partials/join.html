@@ -1,19 +1,31 @@
 <div class="col-sm-12" ng-controller="GameCtrl">
-
     <h1>Species </h1>
-    <p>[Species profile HERE! Awesome lalalala]</p>
-    <p>Value number {{speciesVal}}</p>
+
+    <div class="col-sm-12" ng-show="joinTrue">  
+      <p>Species name: {{itemDetail.name}}</p>
+      <p>Species class: {{itemDetail.class}}</p>
+      <p>Species habitat: {{itemDetail.habitat}}</p>
+      <h4>Stats:</h4>
+      <ul>
+        <li>Energy: {{itemDetail.stats.energy}}</li>
+        <li>Food: {{itemDetail.stats.food}}</li>
+        <li>Land: {{itemDetail.stats.land}}</li>
+        <li>Population: {{itemDetail.stats.population}}</li>
+      </ul>
+      <p>Influences: {{itemDetail.stats.influence}}</p>
+      <p>Value number {{speciesVal}}</p>
+    </div>
 
     <form ng-hide="joinTrue" ng-submit="joinGame()">
-      <input ng-model="gameId" type="text" placeholder="Enter Game ID" />
-      <button type="submit">Join</button>
+      <input ng-model="gameId" type="text" placeholder="Enter Game ID" class="fr-input"/>
+      <button type="submit" class="btn btn-primary">Join</button>
     </form>
 
 
     <div class="col-sm-12" ng-show="joinTrue">
          <form ng-submit="sendMessage()">
            <input ng-hide="true" ng-model="readyState" type="text" placeholder="Type your message" ng-value="readyState"/>
-           <button type="submit" ng-hide="turnSession">I'm Ready!</button>
+           <button type="submit" ng-hide="turnSession" class="btn btn-primary">I'm Ready!</button>
           </form>
     </div>
 
@@ -22,13 +34,13 @@
       <p>Turn {{turnCounter}}</p>
       <form ng-submit="sendVote()" ng-hide="submitted">
           <input ng-model="influences" type="text" placeholder="Add influences"/>
-          <button type="submit">Send my vote</button>
+          <button type="submit" class="btn btn-primary">Send my vote</button>
       </form>
       <p ng-hide="votingStatus">Waiting for another player</p>
       <div ng-show="votingStatus">
 
         <form ng-submit="finishMotion()">
-          <button type="submit">Continue</button>
+          <button type="submit" class="btn btn-primary">Continue</button>
         </form>
 
       </div>

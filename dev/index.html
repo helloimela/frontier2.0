@@ -32,8 +32,22 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.6.1/angular-sanitize.min.js"></script>
     <script src="https://cdn.pubnub.com/pubnub-3.7.21.js"></script>
     <script src="https://cdn.pubnub.com/sdk/pubnub-angular/pubnub-angular-3.2.1.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/4.6.2/firebase.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/angularFire/2.3.0/angularfire.min.js"></script>
     <!-- Include all compiled plugins (below), or include individual files as needed -->
     <!-- <script src="js/vendor/vendor.js"></script> -->
     <script src="js/main/all.min.js"></script>
+    <script>
+      // Initialize Firebase
+      var config = {
+        apiKey: "AIzaSyCt1c8K5ww4IxKJLkjpgcpKTkcRrW_kqE8",
+        authDomain: "frontier-a3fcb.firebaseapp.com",
+        databaseURL: "https://frontier-a3fcb.firebaseio.com",
+        projectId: "frontier-a3fcb",
+        storageBucket: "frontier-a3fcb.appspot.com",
+        messagingSenderId: "624053904548"
+      };
+      firebase.initializeApp(config);
+    </script>
   </body>
 </html>

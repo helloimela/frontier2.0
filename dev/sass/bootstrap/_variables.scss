@@ -19,22 +19,27 @@ $gray:                   lighten(#000, 33.5%) !default; // #555
 $gray-light:             lighten(#000, 60%) !default;   // #999
 $gray-lighter:           lighten(#000, 93.5%) !default; // #eee
 
-$brand-primary:         #bd2d40 !default;
+$brand-primary:         #7cfff6 !default;
 $brand-success:         #5cb85c !default;
 $brand-info:            #5bc0de !default;
 $brand-warning:         #f0ad4e !default;
 $brand-danger:          #d9534f !default;
 $brand-onblack:         #fff !default;
 
+$brand-bg:				#00d7e6; //bg big box
+$brand-dark-green:		#056344; //border big square
+$brand-light-green:		#77ffcd; //bg big square
+$brand-dark-aqua:		#1e91c6; //border button
+$brand-light-aqua:		#7cfff6; //bg button
 
 //== Scaffolding
 //
 //## Settings for some of the most global styles.
 
 //** Background color for `<body>`.
-$body-bg:               #fff !default;
+$body-bg:               #000 !default;
 //** Global text color on `<body>`.
-$text-color:            $gray-dark !default;
+$text-color:            $gray-lighter !default;
 
 //** Global textual link color.
 $link-color:            $brand-primary !default;
@@ -160,7 +165,7 @@ $btn-default-color:              #333 !default;
 $btn-default-bg:                 #fff !default;
 $btn-default-border:             #ccc !default;
 
-$btn-primary-color:              #fff !default;
+$btn-primary-color:              $gray-dark !default;
 $btn-primary-bg:                 $brand-primary !default;
 $btn-primary-border:             darken($btn-primary-bg, 5%) !default;
 

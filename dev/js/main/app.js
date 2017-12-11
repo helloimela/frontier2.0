@@ -1,5 +1,5 @@
 var app = angular.module('frontier', [
-  'ngRoute', 'ngAnimate', 'ngSanitize','pubnub.angular.service'
+  'ngRoute', 'ngAnimate', 'ngSanitize','pubnub.angular.service','firebase'
 ]);
 
 
@@ -19,6 +19,8 @@ var app = angular.module('frontier', [
 // 12. If players reach TURN 5, shows final result, and WINNER ??????
 //      Convert stats into scores (?)
 // 13. Style the pages
+// 14. [join.html] Shows voting form after click Ready button
+// 15. Randomize species
 
 app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $locationProvider) {
   $routeProvider
@@ -33,21 +35,14 @@ app.config(['$routeProvider', '$locationProvider', function ($routeProvider, $lo
     });
 }]);
 
-app.controller('MainCtrl', ['$sce','$http','$scope','$location','$rootScope','$window','Pubnub',function($sce,$http, $scope, $location, $rootScope, $window, Pubnub){
+app.controller('MainCtrl', ['$sce','$http','$scope','$location','$rootScope','$window','Pubnub','$firebaseArray',function($sce,$http, $scope, $location, $rootScope, $window, Pubnub,$firebaseArray){
 	$scope.go = function ( path ) {
 	  $location.path( path );
 	};
 
-  $scope.uuid = Math.random(100).toString();
-  Pubnub.init({
-    publish_key: 'pub-c-ae9aadc9-90d8-4e74-9a27-7d939ba17845',
-    subscribe_key: 'sub-c-65f9ff5c-da08-11e7-96a8-ea37cc28f519',
-    uuid: $scope.uuid
-  });
-
 }]);
 
-app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$scope,Pubnub){
+app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',function($rootScope,$scope,Pubnub,$firebaseArray){
   $scope.messages = [];
   $scope.presences = [];
   $scope.votes = [];
@@ -55,10 +50,28 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
   $scope.speciesVal = 1;
   $scope.totalInfluences = 0;
   $rootScope.numPlayers=0;
+
   $scope.startGame = function(){
+    $scope.uuid = Math.random(100).toString();
+    Pubnub.init({
+      publish_key: 'pub-c-ae9aadc9-90d8-4e74-9a27-7d939ba17845',
+      subscribe_key: 'sub-c-65f9ff5c-da08-11e7-96a8-ea37cc28f519',
+      uuid: $scope.uuid
+    });
+
     $scope.rand = Math.floor(Math.random() * 10000) + 1000;
     $scope.channel = 'game-'+$scope.rand;
     $scope.hideStartGame = true;
+
+    firebase.database().ref('gameChannel').child($scope.channel).set({
+      id : $scope.rand
+    }); 
+
+    $scope.slicedUUID = $scope.uuid.slice(2);
+    firebase.database().ref('gameChannel').child($scope.channel+'/players/player-' + $scope.slicedUUID).set({
+      uuid : $scope.uuid,
+      speciesId : 'screen'
+    });
 
     Pubnub.subscribe({
        channel: $scope.channel,
@@ -126,10 +139,20 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
   $scope.gameId = "";
   $scope.joinGame = function(){
     console.log('click');
+    $scope.uuid = Math.random(100).toString();
+    Pubnub.init({
+      publish_key: 'pub-c-ae9aadc9-90d8-4e74-9a27-7d939ba17845',
+      subscribe_key: 'sub-c-65f9ff5c-da08-11e7-96a8-ea37cc28f519',
+      uuid: $scope.uuid
+    });
+
     $rootScope.numPlayers+=1;
     // $scope.numPlayers.$apply();
     $scope.joinTrue = true;
     $scope.channel = 'game-'+$scope.gameId;
+
+    $scope.slicedUUID = $scope.uuid.slice(2);
+    $scope.assignID($scope.slicedUUID,$scope.channel);
 
     // Subscribing to the ‘messages-channel’ and trigering the message callback
     Pubnub.subscribe({
@@ -186,6 +209,50 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub',function($rootScope,$s
       // console.log(presenceEvent);
       // console.log($scope.presences);
     };
+
+  // endof joinGame
+  };
+
+  $scope.assignID = function(uuid,channel){
+      console.log(uuid+', '+channel);
+
+      return firebase.database().ref('gameChannel/'+channel+'/players').once('value').then(function(snapshot) {
+        console.log("numChildren "+snapshot.numChildren()+" ");
+        var asid = (snapshot.numChildren()===2) ? 0 : 1;
+        console.log("The ID is "+asid+" ");
+        firebase.database().ref('gameChannel').child(channel+'/players/player-' + uuid).set({
+          uuid : uuid,
+          speciesId : asid
+        });
+        $scope.showProfile(uuid,channel,asid);
+      });
+      
+  };
+
+  $scope.showProfile = function(uuid,channel,specID){
+    var ref = firebase.database().ref('species');
+    var data= $firebaseArray(ref);
+    var dataisi = {};
+
+    data.$loaded().then(function() {
+        $scope.itemDetail = data[specID];
+        dataisi = data[specID];
+        firebase.database().ref('gameChannel').child(channel+'/players/player-' + uuid).update({
+           'species/class' : dataisi.class,
+           'species/habitat' : dataisi.habitat,
+           'species/name' : dataisi.name,
+           'species/type' : dataisi.type,
+           'species/stats/energy' : dataisi.stats.energy,
+           'species/stats/food' : dataisi.stats.food,
+           'species/stats/influence' : dataisi.stats.influence,
+           'species/stats/land' : dataisi.stats.land,
+           'species/stats/population' : dataisi.stats.population
+        });
+        // To iterate the key/value pairs of the object, use angular.forEach()
+        // angular.forEach(data, function(value, key) {
+        //   // console.log(key, value);
+        // });
+    });
   };
 
   $scope.sendMessage = function() {

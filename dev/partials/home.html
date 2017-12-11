@@ -6,7 +6,7 @@
 		<p>Game ID: {{rand}}</p>
 		<p>Enter the game ID on your phone</p>
 		<!-- <p>{{presences[presences.length-1].occupancy}} players online</p> -->
-		<p ng-if="presences.length>0">{{presences.length-1}} players online</p>
+		<p ng-if="presences.length>0&&presences.length<=3">{{presences.length-1}} players online</p>
 	</div>
 
 	<div class="col-sm-12" ng-show="presences.length==3">
