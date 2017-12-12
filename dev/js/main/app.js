@@ -339,8 +339,19 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.totalInfluences2 = 0;
     $scope.submitted = false;
 
-    var refmot1 = firebase.database().ref('motions/motion-01');
-    var refmot2 = firebase.database().ref('motions/motion-02');
+    if ($scope.turnCounter==1){
+      var mot1 = '01';
+      var mot2 = '02';
+    } else if ($scope.turnCounter==2){
+      var mot1 = '03';
+      var mot2 ='04';
+    } else if ($scope.turnCounter==3){
+      var mot1 = '05';
+      var mot2 = '06';
+    }
+
+    var refmot1 = firebase.database().ref('motions/motion-'+mot1);
+    var refmot2 = firebase.database().ref('motions/motion-'+mot1);
     var datamotion1= $firebaseArray(refmot1);
     var datamotion2= $firebaseArray(refmot2);
 
@@ -383,12 +394,12 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   $scope.countInfluence = function(num, num2){
     $scope.totalInfluences+=parseInt(num);
     $scope.totalInfluences2+=parseInt(num2);
-    if ($scope.totalInfluences>=5) {
+    if ($scope.totalInfluences>=$scope.motion[0].influence_required) {
       $scope.motionStatus = 'PASSED!';
     } else {
       $scope.motionStatus = 'FAILED!';
     }
-    if ($scope.totalInfluences2>=5) {
+    if ($scope.totalInfluences2>=$scope.motion2[0].influence_required) {
       $scope.motionStatus2 = 'PASSED!';
     } else {
       $scope.motionStatus2 = 'FAILED!';
