@@ -70,6 +70,7 @@ html,body, body>div, .container{
 	height: 100%;
 	color: $text-color;
 	position: relative;
+	font-family: $font-family-serif;
 }
 body>div{
 	@media (max-width: $screen-sm-min) {
@@ -87,6 +88,162 @@ form{
 	.fr-input{
 		background: $brand-light-aqua;
 		border:2px solid $gray-dark;
+	}
+}
+.text-center{
+	text-align: center;
+}
+
+.box-container{
+	flex-direction:row;
+	width: 100%;
+	margin-bottom:11px;
+}
+.flex-container{
+	display: flex;
+	display: -webkit-flex;
+}
+.flex-container-center{
+	display: flex;
+	display: -webkit-flex;
+	-webkit-align-items: center;
+          align-items: center;
+  -webkit-justify-content: center;
+          justify-content: center;
+}
+.col-100{
+	width: 100%;
+}
+.flex-0{
+	-webkit-flex: 0 0 auto;
+	    flex: 0 0 auto;
+	    width: 100%;
+}
+.flex-1{
+	-webkit-flex: 1;
+	    flex: 1;
+}
+.flex-2{
+	-webkit-flex: 2;
+            flex: 2;
+}
+.flex-3{
+	-webkit-flex: 3;
+            flex: 3;
+}
+.flex-4{
+	-webkit-flex: 4;
+            flex: 4;
+}
+.flex-5{
+	-webkit-flex: 5;
+            flex: 5;
+}
+.box{
+	background:$brand-bg;
+    border-left:4px solid $brand-dark-aqua;
+    border-right:4px solid $brand-dark-aqua;
+    position:relative;
+    padding:5px;
+    color:#000;
+    &:after, &:before{
+    	content: '';
+    	width: 100%;
+    	height: 4px;
+    	background: $brand-dark-aqua;
+    	border-left: 4px solid transparent;
+    	border-right: 4px solid transparent;
+    	box-sizing:border-box;
+    	position: absolute;
+    	left: 0;
+    }
+    &:before{
+    	top:-4px;
+    }
+    &:after{
+    	bottom: -4px;
+    }
+    &.inside-box{
+    	background: $brand-light-green;
+    	border-left:4px solid $brand-dark-green;
+    	margin-right: 5px;
+    	margin-top: 5px;
+    	margin-bottom: 5px;
+    	border-right:4px solid $brand-dark-green;
+    	&:after, &:before{
+    		background: $brand-dark-green;
+    	}
+    }
+    &.inside-no-corner{
+    	margin-bottom: 0;
+    	margin-top: 0;
+    }
+    &.inside-no-corner:before, &.inside-no-corner:after{
+    	border-left: 0;
+    	border-right: 8px solid $brand-dark-green;
+    	left: -4px;
+    	box-sizing:content-box;
+    }
+    &.inside-no-corner:after{
+    	height: 0px;
+    }
+    .prop-box:last-child{
+		.inside-no-corner:after{
+    		height: 4px;
+    	}
+	}
+
+}
+
+.logo-small{
+	margin:20px 0 30px;
+	width: 300px;
+}
+
+.form-join{
+	input[type="text"]{
+		padding: 10px;
+		@include border-radius(5px);
+		border: 4px solid $brand-dark-green;
+		text-align: center;
+		font-size: 1.5em;
+	}
+}
+
+.btn-main{
+	background: $brand-light-aqua;
+	border:4px solid $brand-dark-aqua;
+	padding: 10px 30px;
+	box-shadow: none;
+	color: $gray-darker;
+	position: relative;
+	text-align: center;
+	width: 200px;
+	margin: 10px 0;
+	@include border-radius(2px);
+	&:after,&:before{
+		content: '';
+		width: 100%;
+		height: 118%;
+		z-index: 1;
+		position: absolute;
+		top: -7px;
+		left: 0;
+		box-sizing:content-box;
+	}
+	&:before{
+		border-top: 3px solid $brand-dark-green;
+		border-bottom:3px solid $brand-dark-green;
+	}
+	&:after{
+		left: -7px;
+		top: -4px;width: 200px;
+		border-left: 3px solid $brand-dark-green;
+		border-right: 3px solid $brand-dark-green;
+	}
+	span{
+		position: relative;
+		z-index: 4;
 	}
 }
 

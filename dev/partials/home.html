@@ -1,31 +1,48 @@
 <div class="col-sm-12" ng-controller="GameCtrl">
-	<h1>Frontier</h1>
-	<button class="btn btn-success" ng-click="startGame()" ng-hide="hideStartGame">Start Game</button>
 
-	<div class="col-sm-12" ng-show="hideStartGame">
-		<p>Game ID: {{rand}}</p>
-		<p>Enter the game ID on your phone</p>
-		<!-- <p>{{presences[presences.length-1].occupancy}} players online</p> -->
-		<p ng-if="presences.length>0&&presences.length<=3">{{presences.length-1}} players online</p>
+
+	<div class="col-sm-12 text-center">
+		<img src="img/logo1.png">
+	</div>
+	<div class="box-container flex-container">
+		<div class="box col-100">
+			<div class="text-center" ng-hide="hideStartGame">
+				<p>A planet of a thousand footprint</p>
+				<p>[a story or image picture or gif]</p>
+			</div>
+			<div class="col-sm-12 text-center" ng-show="hideStartGame">
+				<p>Game ID: {{rand}}</p>
+				<p>Enter the game ID on your phone</p>
+				<!-- <p>{{presences[presences.length-1].occupancy}} players online</p> -->
+				<p ng-if="presences.length>0&&presences.length<=3">{{presences.length-1}} players online</p>
+			</div>
+
+			<div class="col-sm-12" ng-show="presences.length==3">
+				<p>Show Global Data</p>
+				<p>Species Value: {{speciesVal}}</p>
+			</div>
+
+			<div class="col-sm-12" ng-show="turnSession"> 
+				<!-- if players more than 2, change to messages.length >= pr.occupancy -->
+				<p>Everyone is ready!</p>
+
+				<h4>Turn {{turnCounter}}</h4>
+
+				<p ng-hide="votingStatus">Voting process ....</p>
+				<p ng-show="votingStatus">Total Influences: <span>{{totalInfluences}}</span></p>
+
+			</div>
+		</div>
 	</div>
 
-	<div class="col-sm-12" ng-show="presences.length==3">
-		<p>Show Global Data</p>
-		<p>Species Value: {{speciesVal}}</p>
-	</div>
-
-	<div class="col-sm-12" ng-show="turnSession"> 
-		<!-- if players more than 2, change to messages.length >= pr.occupancy -->
-		<p>Everyone is ready!</p>
-
-		<h4>Turn {{turnCounter}}</h4>
-
-		<p ng-hide="votingStatus">Voting process ....</p>
-		<p ng-show="votingStatus">Total Influences: <span>{{totalInfluences}}</span></p>
-
+	<div class="box-container flex-container">
+		<div class="box flex-container-center flex-1">
+			<button class="button btn-main" ng-click="startGame()" ng-hide="hideStartGame">Start the game</button>
+		</div>
 	</div>
 
 </div>
+
 
 
 

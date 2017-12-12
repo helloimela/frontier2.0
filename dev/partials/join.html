@@ -1,95 +1,154 @@
 <div class="col-sm-12" ng-controller="GameCtrl">
-    <h1>Species </h1>
-
-    <div class="col-sm-12" ng-show="joinTrue">  
-      <p>Species name: {{itemDetail.name}}</p>
-      <p>Species class: {{itemDetail.class}}</p>
-      <p>Species habitat: {{itemDetail.habitat}}</p>
-      <h4>Stats:</h4>
-      <ul>
-        <li>Energy: {{itemDetail.stats.energy}}</li>
-        <li>Food: {{itemDetail.stats.food}}</li>
-        <li>Land: {{itemDetail.stats.land}}</li>
-        <li>Population: {{itemDetail.stats.population}}</li>
-      </ul>
-      <p>Influences: {{itemDetail.stats.influence}}</p>
-      <p>Value number {{speciesVal}}</p>
+    <div class="col-sm-12 text-center">
+      <img class="logo-small" src="img/logo1.png">
     </div>
 
-    <form ng-hide="joinTrue" ng-submit="joinGame()">
+     <form ng-hide="joinTrue" ng-submit="joinGame()" class="text-center form-join">
       <input ng-model="gameId" type="text" placeholder="Enter Game ID" class="fr-input"/>
-      <button type="submit" class="btn btn-primary">Join</button>
+      <br><button type="submit" class="button btn-main">Join</button>
     </form>
 
+    <div ng-show="joinTrue">
 
-    <div class="col-sm-12" ng-show="joinTrue">
-         <form ng-submit="sendMessage()">
-           <input ng-hide="true" ng-model="readyState" type="text" placeholder="Type your message" ng-value="readyState"/>
-           <button type="submit" ng-hide="turnSession" class="btn btn-primary">I'm Ready!</button>
-          </form>
-    </div>
-
-    <div class="col-sm-12" ng-show="turnSession">
-      <!-- TODO : shows everytime player click ready -->
-      <p>Turn {{turnCounter}}</p>
-      
-          <div class="flex-container flex-0 prop-box">
-          <div class="box flex-5 inside-box inside-no-corner">
-              <p>Motion 1</p>
-              <ul>
-                <li>Topic: {{motion.topic}}</li>
-                <li>Type: {{motion.type}}</li>
-              </ul>
-              <ul>
-                <li ng-hide="effects.land==0">Land: {{motion.effects.land}}</li>
-                <li ng-hide="effects.population==0">Population: {{motion.effects.population}}</li>
-                <li ng-hide="effects.energy==0">Energy: {{motion.effects.energy}}</li>
-                <li ng-hide="effects.food==0">Food: {{motion.effects.food}}</li>
-              </ul>
-              <strong>Influence Required: {{motion.effects.influence_required}}</strong>
-            </div>
-            <div class="flex-1">
-              <button ng-click="addInfluence(1)">+</button>
-              <p>{{ influences }}</p>
-              <button ng-click="removeInfluence(1)">-</button>
-            </div>
+      <div class="box-container flex-container">
+        <div class="box flex-container flex-1">
+          <div class="box flex-2 inside-box">a profile picture</div>
+          <div class="box flex-3 inside-box">
+            <ul>
+              <li>Class: {{itemDetail.class}}</li>
+              <li>Type: {{itemDetail.type}}</li>
+              <li>Habitat: {{itemDetail.habitat}}</li>
+            </ul>
           </div>
-          <div class="flex-container flex-0 prop-box">
-          <div class="box flex-5 inside-box inside-no-corner">
-              <p>Motion 2</p>
-              <ul>
-                <li>Topic: {{motion2.topic}}</li>
-                <li>Type: {{motion2.type}}</li>
-              </ul>
-              <ul>
-                <li ng-hide="effects.land==0">Land: {{motion2.effects.land}}</li>
-                <li ng-hide="effects.population==0">Population: {{motion2.effects.population}}</li>
-                <li ng-hide="effects.energy==0">Energy: {{motion2.effects.energy}}</li>
-                <li ng-hide="effects.food==0">Food: {{motion2.effects.food}}</li>
-              </ul>
-              <strong>Influence Required: {{motion2.effects.influence_required}}</strong>
-            </div>
-            <div class="flex-1">
-              <button ng-click="addInfluence(2)">+</button>
-              <p>{{ influences2 }}</p>
-              <button ng-click="removeInfluence(2)">-</button>
-            </div>
-            <button ng-click="sendVote()" ng-hide="submitted">Send my vote</button>
-          </div>
-
-      <p ng-hide="votingStatus">Waiting for another player</p>
-      <div ng-show="votingStatus">
-
-        <form ng-submit="finishMotion()">
-          <button type="submit" class="btn btn-primary">Continue</button>
-        </form>
-
+          <div class="flex-1"></div>
+        </div>
       </div>
 
-    </div>
+      <div class="hideOnTurnSession" ng-hide="turnSession">
+          <div class="box-container flex-container">
+            <div class="box col-100">
+              <div class="flex-container flex-0 influence-box">
+                <div class="flex-2"></div>
+                <div class="box flex-3 inside-box">Influence: {{itemDetail.stats.influence}}</div>
+                <div class="flex-1"></div>
+              </div>  
+
+              <div class="flex-container flex-0 prop-box">
+                <div class="box flex-5 inside-box inside-no-corner">Land Usage: {{itemDetail.stats.land}}</div>
+                <div class="flex-1">nav</div>
+              </div>
+              <div class="flex-container flex-0 prop-box">
+                <div class="box flex-5 inside-box inside-no-corner">Population: {{itemDetail.stats.population}}</div>
+                <div class="flex-1">nav</div>
+              </div>
+              <div class="flex-container flex-0 prop-box">
+                <div class="box flex-5 inside-box inside-no-corner">Energy: {{itemDetail.stats.energy}}</div>
+                <div class="flex-1">nav</div>
+              </div>
+              <div class="flex-container flex-0 prop-box">
+                <div class="box flex-5 inside-box inside-no-corner">Food: {{itemDetail.stats.food}}</div>
+                <div class="flex-1">nav</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="box-container flex-container">
+            <div class="box flex-container-center flex-1">
+                <form ng-submit="sendMessage()">
+                 <input ng-hide="true" ng-model="readyState" type="text" placeholder="Type your message" ng-value="readyState"/>
+                 <button type="submit" ng-hide="turnSession" class="button btn-main">I'm Ready!</button>
+                </form>
+            </div>
+          </div>
+
+      <!-- hide on turnSession -->
+      </div>
+
+      <div class="showOnTurnSession" ng-show="turnSession">
+          
+            <div class="box-container flex-container">
+              <div class="box col-100">
+                <div class="flex-container flex-0 influence-box">
+                  <div class="flex-2"></div>
+                  <div class="box flex-3 inside-box">Influence: {{itemDetail.stats.influence}}</div>
+                  <div class="flex-1"></div>
+                </div>  
+                <div class="flex-container flex-0 influence-box">
+                  <div class="flex-2"></div>
+                  <div class="box flex-3 inside-box">Turn {{turnCounter}}</div>
+                  <div class="flex-1"></div>
+                </div>  
+
+                <div class="flex-container flex-0 prop-box">
+                  <div class="box flex-5 inside-box inside-no-corner">
+                      <p>Motion 1</p>
+                      <ul>
+                        <li>Topic: {{motion.topic}}</li>
+                        <li>Type: {{motion.type}}</li>
+                      </ul>
+                      <ul>
+                        <li ng-hide="effects.land==0">Land: {{motion.effects.land}}</li>
+                        <li ng-hide="effects.population==0">Population: {{motion.effects.population}}</li>
+                        <li ng-hide="effects.energy==0">Energy: {{motion.effects.energy}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion.effects.food}}</li>
+                      </ul>
+                      <strong>Influence Required: {{motion.effects.influence_required}}</strong>
+                  </div>
+                  <div class="flex-1">
+                      <button ng-click="addInfluence(1)">+</button>
+                      <p>{{ influences }}</p>
+                      <button ng-click="removeInfluence(1)">-</button>
+                  </div>
+                </div>
+                <div class="flex-container flex-0 prop-box">
+                  <div class="box flex-5 inside-box inside-no-corner">
+                      <p>Motion 2</p>
+                      <ul>
+                        <li>Topic: {{motion2.topic}}</li>
+                        <li>Type: {{motion2.type}}</li>
+                      </ul>
+                      <ul>
+                        <li ng-hide="effects.land==0">Land: {{motion2.effects.land}}</li>
+                        <li ng-hide="effects.population==0">Population: {{motion2.effects.population}}</li>
+                        <li ng-hide="effects.energy==0">Energy: {{motion2.effects.energy}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion2.effects.food}}</li>
+                      </ul>
+                      <strong>Influence Required: {{motion2.effects.influence_required}}</strong>
+                  </div>
+                  <div class="flex-1">
+                      <button ng-click="addInfluence(2)">+</button>
+                      <p>{{ influences2 }}</p>
+                      <button ng-click="removeInfluence(2)">-</button>
+                  </div>
+                </div>
+             </div>
+          </div>
+
+          <div class="box-container flex-container">
+              <div class="box flex-container-center flex-1">
+                  <button ng-click="sendVote()" ng-hide="submitted" class="button btn-main">Send my vote</button>
+              </div>
+          </div>
+          <div class="box-container flex-container">
+              <div class="box flex-container-center flex-1">
+                  <div class="voteStatus">
+                      <p ng-hide="votingStatus">Waiting for another player</p>
+                      <div ng-show="votingStatus">
+                          <form ng-submit="finishMotion()">
+                            <button type="submit" class="button btn-main">Continue</button>
+                          </form> 
+                      </div>
+                  </div>
+              </div>
+          </div>
+
+      <!-- show on turnSession -->
+      </div>
+
+    <!-- join true -->
+   </div>
 
 </div>
-
 
 
 <!-- <ul class="col-sm-12">

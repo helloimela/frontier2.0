@@ -2,8 +2,10 @@
 // defaults to true if twbs-font-path function is present (no function => twbs-font-path('') parsed as string == right side)
 // in Sass 3.3 this can be improved with: function-exists(twbs-font-path)
 $bootstrap-sass-asset-helper: (twbs-font-path("") != unquote('twbs-font-path("")')) !default;
-@import url('https://fonts.googleapis.com/css?family=Raleway:200,300,400,500,600,700,800,900');
 @import url('https://fonts.googleapis.com/css?family=Montserrat:200,300,400,500,600,700');
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono:300,400,500,700');
+@import url('https://fonts.googleapis.com/css?family=VT323');
+
 //
 // Variables
 // --------------------------------------------------
@@ -52,12 +54,12 @@ $link-hover-color:      darken($link-color, 15%) !default;
 //## Font, line-height, and color for body text, headings, and more.
 
 $font-family-sans-serif:  "Montserrat","Helvetica Neue", Helvetica, Arial, sans-serif !default;
-$font-family-serif:       Georgia, "Times New Roman", Times, serif !default;
+$font-family-serif:       "VT323",Georgia, "Times New Roman", Times, serif !default;
 //** Default monospace fonts for `<code>`, `<kbd>`, and `<pre>`.
 $font-family-monospace:   Menlo, Monaco, Consolas, "Courier New", monospace !default;
 $font-family-base:        $font-family-sans-serif !default;
 
-$font-size-base:          14px !default;
+$font-size-base:          18px !default;
 $font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
 $font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
 
