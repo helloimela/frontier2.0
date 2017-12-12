@@ -6744,6 +6744,12 @@ form .fr-input {
   width: 300px;
 }
 
+.start-image {
+  width: 512px;
+  height: 341px;
+  margin: auto;
+  align-self: center;
+}
 .form-join input[type="text"] {
   padding: 10px;
   -moz-border-radius: 5px;

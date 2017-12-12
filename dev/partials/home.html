@@ -6,8 +6,10 @@
 	<div class="box-container flex-container">
 		<div class="box col-100">
 			<div class="text-center" ng-hide="hideStartGame">
-				<p>A planet of a thousand footprint</p>
-				<p>[a story or image picture or gif]</p>
+				<p>A planet of a thousand footprints</p>
+				<div class="box flex-2 inside-box">
+					<img class="start-image" src="img/start_image.gif">
+				</div>
 			</div>
 			<div class="col-sm-12 text-center" ng-show="hideStartGame">
 				<p>Game ID: {{rand}}</p>
@@ -39,10 +41,38 @@
 				<h4>Turn {{turnCounter}}</h4>
 
 				<p ng-hide="votingStatus">Voting process ....</p>
-				<h4 ng-show="votingStatus">Results</h4>
-				<p ng-show="votingStatus">Motion 1: <span>{{totalInfluences}}.</span> {{motionStatus}}</p>
-				<p ng-show="votingStatus">Motion 2: <span>{{totalInfluences2}}.</span> {{motionStatus2}}</p>
-
+				<div class="box flex-5 inside-box inside-no-corner">
+                      <p>Motion 1</p>
+                      <ul>
+                        <li>Topic: {{motion[2].$value}}</li>
+                        <li>Type: {{motion[3].$value}}</li>
+                      </ul>
+                      <ul>
+                        <li ng-hide="effects.population==0">Population: {{motion[0].population}}</li>
+                        <li ng-hide="effects.resource==0">Resource: {{motion[0].resource}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion[0].food}}</li>
+                      </ul>
+                      <strong>Influence Required: {{motion[0].influence_required}}</strong> 
+                </div>
+                <div class="flex-1">
+                    <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences}})</span> </p>
+                </div>
+                <div class="box flex-5 inside-box inside-no-corner">
+                      <p>Motion 2</p>
+                      <ul>
+                        <li>Topic: {{motion2[2].$value}}</li>
+                        <li>Type: {{motion2[3].$value}}</li>
+                      </ul>
+                      <ul>
+                        <li ng-hide="effects.population==0">Population: {{motion2[0].population}}</li>
+                        <li ng-hide="effects.resource==0">Resource: {{motion2[0].resource}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion2[0].food}}</li>
+                      </ul>
+                      <strong>Influence Required: {{motion2[0].influence_required}}</strong>
+                </div>
+                 <div class="flex-1">
+	                 <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences2}})</span> </p>
+	             </div>
 			</div>
 		</div>
 	</div>
