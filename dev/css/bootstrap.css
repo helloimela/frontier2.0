@@ -6793,3 +6793,21 @@ form .fr-input {
   position: relative;
   z-index: 4;
 }
+
+.btn-influence {
+  background: #7cfff6;
+  border: 5px solid #1e91c6;
+  color: #000;
+  border-radius: 10px;
+  text-align: center;
+  width: 35px;
+}
+
+.box-influence {
+  display: block;
+  background: #fff;
+  width: 35px;
+  text-align: center;
+  padding: 5px;
+  margin: 10px 0;
+}

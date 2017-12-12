@@ -247,4 +247,20 @@ form{
 	}
 }
 
+.btn-influence{
+	background: $brand-light-aqua;
+	border:5px solid $brand-dark-aqua;
+	color: #000;
+	border-radius: 10px;text-align: center;
+	width: 35px;
+}
+.box-influence{
+	display: block;
+	background: #fff;
+	width: 35px;
+	text-align: center;
+	padding: 5px;
+	margin: 10px 0;
+}
+
 

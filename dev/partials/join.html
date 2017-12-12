@@ -30,24 +30,28 @@
               <div class="flex-container flex-0 influence-box">
                 <div class="flex-2"></div>
                 <div class="box flex-3 inside-box">Influence: {{itemDetail.stats.influence}}</div>
-                <div class="flex-1"></div>
               </div>  
 
               <div class="flex-container flex-0 prop-box">
-                <div class="box flex-5 inside-box inside-no-corner">Land Usage: {{itemDetail.stats.land}}</div>
-                <div class="flex-1">nav</div>
+                <div class="box flex-5 inside-box inside-no-corner">
+                  <span><img src="img/icon_population.png"></span>
+                  <span>Population: {{itemDetail.stats.population}}</span>
+                </div>
+                <!-- <div class="flex-1">nav</div> -->
               </div>
               <div class="flex-container flex-0 prop-box">
-                <div class="box flex-5 inside-box inside-no-corner">Population: {{itemDetail.stats.population}}</div>
-                <div class="flex-1">nav</div>
+                <div class="box flex-5 inside-box inside-no-corner">
+                  <span><img src="img/icon_resource.png"></span>
+                  <span>Resource: {{itemDetail.stats.resource}}</span>
+                </div>
+                <!-- <div class="flex-1">nav</div> -->
               </div>
               <div class="flex-container flex-0 prop-box">
-                <div class="box flex-5 inside-box inside-no-corner">Energy: {{itemDetail.stats.energy}}</div>
-                <div class="flex-1">nav</div>
-              </div>
-              <div class="flex-container flex-0 prop-box">
-                <div class="box flex-5 inside-box inside-no-corner">Food: {{itemDetail.stats.food}}</div>
-                <div class="flex-1">nav</div>
+                <div class="box flex-5 inside-box inside-no-corner">
+                  <span><img src="img/icon_food.png"></span>
+                  <span>Food: {{itemDetail.stats.food}}</span>
+                </div>
+                <!-- <div class="flex-1">nav</div> -->
               </div>
             </div>
           </div>
@@ -83,42 +87,40 @@
                   <div class="box flex-5 inside-box inside-no-corner">
                       <p>Motion 1</p>
                       <ul>
-                        <li>Topic: {{motion.topic}}</li>
-                        <li>Type: {{motion.type}}</li>
+                        <li>Topic: {{motion[2].$value}}</li>
+                        <li>Type: {{motion[3].$value}}</li>
                       </ul>
                       <ul>
-                        <li ng-hide="effects.land==0">Land: {{motion.effects.land}}</li>
-                        <li ng-hide="effects.population==0">Population: {{motion.effects.population}}</li>
-                        <li ng-hide="effects.energy==0">Energy: {{motion.effects.energy}}</li>
-                        <li ng-hide="effects.food==0">Food: {{motion.effects.food}}</li>
+                        <li ng-hide="effects.population==0">Population: {{motion[0].population}}</li>
+                        <li ng-hide="effects.resource==0">Resource: {{motion[0].resource}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion[0].food}}</li>
                       </ul>
-                      <strong>Influence Required: {{motion.effects.influence_required}}</strong>
+                      <strong>Influence Required: {{motion[0].influence_required}}</strong>
                   </div>
                   <div class="flex-1">
-                      <button ng-click="addInfluence(1)">+</button>
-                      <p>{{ influences }}</p>
-                      <button ng-click="removeInfluence(1)">-</button>
+                      <button ng-click="addInfluence(1)" class="btn-influence">+</button>
+                      <p class="box-influence">{{ influences }}</p>
+                      <button ng-click="removeInfluence(1)" class="btn-influence">-</button>
                   </div>
                 </div>
                 <div class="flex-container flex-0 prop-box">
                   <div class="box flex-5 inside-box inside-no-corner">
                       <p>Motion 2</p>
                       <ul>
-                        <li>Topic: {{motion2.topic}}</li>
-                        <li>Type: {{motion2.type}}</li>
+                        <li>Topic: {{motion2[2].$value}}</li>
+                        <li>Type: {{motion2[3].$value}}</li>
                       </ul>
                       <ul>
-                        <li ng-hide="effects.land==0">Land: {{motion2.effects.land}}</li>
-                        <li ng-hide="effects.population==0">Population: {{motion2.effects.population}}</li>
-                        <li ng-hide="effects.energy==0">Energy: {{motion2.effects.energy}}</li>
-                        <li ng-hide="effects.food==0">Food: {{motion2.effects.food}}</li>
+                        <li ng-hide="effects.population==0">Population: {{motion2[0].population}}</li>
+                        <li ng-hide="effects.resource==0">Energy: {{motion2[0].resource}}</li>
+                        <li ng-hide="effects.food==0">Food: {{motion2[0].food}}</li>
                       </ul>
-                      <strong>Influence Required: {{motion2.effects.influence_required}}</strong>
+                      <strong>Influence Required: {{motion2[0].influence_required}}</strong>
                   </div>
                   <div class="flex-1">
-                      <button ng-click="addInfluence(2)">+</button>
-                      <p>{{ influences2 }}</p>
-                      <button ng-click="removeInfluence(2)">-</button>
+                      <button ng-click="addInfluence(2)" class="btn-influence">+</button>
+                      <p class="box-influence">{{ influences2 }}</p>
+                      <button ng-click="removeInfluence(2)" class="btn-influence">-</button>
                   </div>
                 </div>
              </div>
@@ -135,13 +137,15 @@
                       <p ng-hide="votingStatus">Waiting for another player</p>
                       <div ng-show="votingStatus">
                           <form ng-submit="finishMotion()">
-                            <button type="submit" class="button btn-main">Continue</button>
+                            <button type="submit" class="button btn-main  ">Continue</button>
                           </form> 
                       </div>
                   </div>
               </div>
           </div>
 
+
+          <p>{{motion[0].topic}}</p>
       <!-- show on turnSession -->
       </div>
 

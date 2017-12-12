@@ -1,5 +1,5 @@
 <div class="col-sm-12" ng-controller="GameCtrl">
-	
+
 	<div class="col-sm-12 text-center">
 		<img src="img/logo1.png">
 	</div>
@@ -18,7 +18,18 @@
 
 			<div class="col-sm-12" ng-show="presences.length==3">
 				<p>Show Global Data</p>
-				<p>Species Value: {{speciesVal}}</p>
+				<p>Species Value: </p>
+				<ul>
+					<li>
+						<p>Population: {{globalPop}}</p>
+					</li>
+					<li>
+						<p>Food: {{globalFood}}</p>
+					</li>
+					<li>
+						<p>Resource: {{globalRsc}}</p>
+					</li>
+				</ul>
 			</div>
 
 			<div class="col-sm-12" ng-show="turnSession"> 

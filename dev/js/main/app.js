@@ -48,6 +48,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   $scope.votes = [];
   $scope.playerTurns=[];
   $scope.speciesVal = 1;
+
+  $scope.globalPop = 0;
+  $scope.globalFood = 0;
+  $scope.globalRsc = 0;
+  $scope.Pop = 0;
+  $scope.Food = 0;
+  $scope.Rsc = 0;
+
   $scope.totalInfluences = 0;
   $scope.totalInfluences2 = 0;
   $rootScope.numPlayers=0;
@@ -97,6 +105,9 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
            if(m.type=='state'){
               $scope.messages.push(m);
               console.log($scope.messages.length);
+              $scope.globalPop +=$scope.Pop;
+              $scope.globalFood +=$scope.Food;
+              $scope.globalRsc +=$scope.Rsc;
               if($scope.messages.length%2==0){
                $scope.runMotion();
               } 
@@ -128,8 +139,8 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
       $scope.$apply();
-      console.log(presenceEvent);
-      console.log($scope.presences);
+      // console.log(presenceEvent);
+      // console.log($scope.presences);
     };
 
   // endof startGame  
@@ -139,7 +150,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
 
   $scope.gameId = "";
   $scope.joinGame = function(){
-    console.log('click');
+    // console.log('click');
     $scope.uuid = Math.random(100).toString();
     Pubnub.init({
       publish_key: 'pub-c-ae9aadc9-90d8-4e74-9a27-7d939ba17845',
@@ -177,7 +188,10 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
        $scope.$apply(function () {
            if(m.type=='state'){
               $scope.messages.push(m);
-              console.log($scope.messages.length);
+              $scope.globalPop +=$scope.Pop;
+              $scope.globalFood +=$scope.Food;
+              $scope.globalRsc +=$scope.Rsc;
+              // console.log($scope.messages.length);
               if($scope.messages.length%2==0){
                $scope.runMotion();
               } 
@@ -215,12 +229,12 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   };
 
   $scope.assignID = function(uuid,channel){
-      console.log(uuid+', '+channel);
+      // console.log(uuid+', '+channel);
 
       return firebase.database().ref('gameChannel/'+channel+'/players').once('value').then(function(snapshot) {
-        console.log("numChildren "+snapshot.numChildren()+" ");
+        // console.log("numChildren "+snapshot.numChildren()+" ");
         var asid = (snapshot.numChildren()===2) ? 0 : 1;
-        console.log("The ID is "+asid+" ");
+        // console.log("The ID is "+asid+" ");
         firebase.database().ref('gameChannel').child(channel+'/players/player-' + uuid).set({
           uuid : uuid,
           speciesId : asid
@@ -237,16 +251,19 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
 
     data.$loaded().then(function() {
         $scope.itemDetail = data[specID];
+        $scope.Pop += data[specID].stats.population;
+        $scope.Food += data[specID].stats.food;
+        $scope.Rsc += data[specID].stats.resource;
+        console.log($scope.Pop);
         dataisi = data[specID];
         firebase.database().ref('gameChannel').child(channel+'/players/player-' + uuid).update({
            'species/class' : dataisi.class,
            'species/habitat' : dataisi.habitat,
            'species/name' : dataisi.name,
            'species/type' : dataisi.type,
-           'species/stats/energy' : dataisi.stats.energy,
+           'species/stats/resource' : dataisi.stats.resource,
            'species/stats/food' : dataisi.stats.food,
            'species/stats/influence' : dataisi.stats.influence,
-           'species/stats/land' : dataisi.stats.land,
            'species/stats/population' : dataisi.stats.population
         });
         // To iterate the key/value pairs of the object, use angular.forEach()
@@ -311,12 +328,27 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   };
   
   $scope.runMotion = function(){
-    console.log('run motion');
+    // console.log('run motion');
     $scope.turnCounter += 1;
     $scope.turnSession = true;
     $scope.totalInfluences = 0;
     $scope.totalInfluences2 = 0;
     $scope.submitted = false;
+
+    var refmot1 = firebase.database().ref('motions/motion-01');
+    var refmot2 = firebase.database().ref('motions/motion-02');
+    var datamotion1= $firebaseArray(refmot1);
+    var datamotion2= $firebaseArray(refmot2);
+
+    datamotion1.$loaded().then(function() {
+        $scope.motion = datamotion1;
+        // console.log($scope.motion);
+    });
+    datamotion2.$loaded().then(function() {
+        $scope.motion2 = datamotion2;
+        // console.log($scope.motion2);
+    });
+
   };
 
 
@@ -357,8 +389,8 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     } else {
       $scope.motionStatus2 = 'FAILED!';
     }
-    console.log($scope.totalInfluences);
-    console.log($scope.votes);
+    // console.log($scope.totalInfluences);
+    // console.log($scope.votes);
 
     // votingStatus = if both players already vote
     if($scope.votes.length%2!=0){
