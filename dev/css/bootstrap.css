@@ -6744,11 +6744,6 @@ form .fr-input {
   width: 300px;
 }
 
-.species-image {
-  width: 128px;
-  height: 128px;
-}
-
 .form-join input[type="text"] {
   padding: 10px;
   -moz-border-radius: 5px;
@@ -6815,4 +6810,9 @@ form .fr-input {
   text-align: center;
   padding: 5px;
   margin: 10px 0;
+}
+
+.species-image {
+  width: 128px;
+  height: 128px;
 }

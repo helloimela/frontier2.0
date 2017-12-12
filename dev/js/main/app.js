@@ -55,6 +55,9 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   $scope.Pop = 0;
   $scope.Food = 0;
   $scope.Rsc = 0;
+  $scope.showPop = 0;
+  $scope.showFood = 0;
+  $scope.showRsc = 0;
 
   $scope.totalInfluences = 0;
   $scope.totalInfluences2 = 0;
@@ -77,9 +80,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     }); 
 
     $scope.slicedUUID = $scope.uuid.slice(2);
-    firebase.database().ref('gameChannel').child($scope.channel+'/players/player-' + $scope.slicedUUID).set({
+    firebase.database().ref('gameChannel').child($scope.channel+'/players/player-screen').set({
       uuid : $scope.uuid,
-      speciesId : 'screen'
+      speciesId : 'screen',
+      globalStats : {
+        population : 0,
+        food : 0,
+        resource : 0
+      }
     });
 
     Pubnub.subscribe({
@@ -120,6 +128,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
               if($scope.playerTurns.length%2==0){
                 $scope.turnSession = false;
                 $scope.speciesVal+=1;
+                var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+                var data= $firebaseArray(ref);
+                data.$loaded().then(function(){
+                    console.log(data);
+                    $scope.showPop = data[0].population;
+                    $scope.showFood = data[0].food;
+                    $scope.showRsc = data[0].resource;
+                });
               }
               
               // empty the votes
@@ -130,6 +146,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel), function(ngEvent, presenceEvent) {
         $scope.$apply(function () {
            $scope.presences.push(presenceEvent);
+           var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+           var data= $firebaseArray(ref);
+           data.$loaded().then(function(){
+               console.log(data);
+               $scope.showPop = data[0].population;
+               $scope.showFood = data[0].food;
+               $scope.showRsc = data[0].resource;
+           });
        });
     });
 
@@ -139,9 +163,26 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
       $scope.$apply();
+      var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+      var data= $firebaseArray(ref);
+      data.$loaded().then(function(){
+          console.log(data);
+          $scope.showPop = data[0].population;
+          $scope.showFood = data[0].food;
+          $scope.showRsc = data[0].resource;
+      });
       // console.log(presenceEvent);
       // console.log($scope.presences);
     };
+
+    var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+    var data= $firebaseArray(ref);
+    data.$loaded().then(function(){
+        console.log(data);
+        $scope.showPop = data[0].population;
+        $scope.showFood = data[0].food;
+        $scope.showRsc = data[0].resource;   
+    });
 
   // endof startGame  
   };
@@ -204,6 +245,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
               if($scope.playerTurns.length%2==0){
                 $scope.turnSession = false;
                 $scope.speciesVal+=1;
+                var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+                var data= $firebaseArray(ref);
+                data.$loaded().then(function(){
+                    console.log(data);
+                    $scope.showPop = data[0].population;
+                    $scope.showFood = data[0].food;
+                    $scope.showRsc = data[0].resource;
+                });
               }
               
            }
@@ -213,6 +262,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.$on(Pubnub.getPresenceEventNameFor($scope.channel), function(ngEvent, presenceEvent) {
         $scope.$apply(function () {
            $scope.presences.push(presenceEvent);
+           var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+           var data= $firebaseArray(ref);
+           data.$loaded().then(function(){
+               console.log(data);
+               $scope.showPop = data[0].population;
+               $scope.showFood = data[0].food;
+               $scope.showRsc = data[0].resource;
+           });
        });
     });
     // console.log($scope.messages);
@@ -221,6 +278,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.pushPresence = function(presenceEvent){
       $scope.presences.push(presenceEvent);
       $scope.$apply();
+      var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+      var data= $firebaseArray(ref);
+      data.$loaded().then(function(){
+          console.log(data);
+          $scope.showPop = data[0].population;
+          $scope.showFood = data[0].food;
+          $scope.showRsc = data[0].resource;
+      });
       // console.log(presenceEvent);
       // console.log($scope.presences);
     };
@@ -239,22 +304,47 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
           uuid : uuid,
           speciesId : asid
         });
-        $scope.showProfile(uuid,channel,asid);
+        var ref = firebase.database().ref('gameChannel/'+channel+'/players/player-screen');
+        var data= $firebaseArray(ref);
+
+        data.$loaded().then(function(){
+          console.log(data);
+            var curPop = data[0].population;
+            var curFood = data[0].food;
+            var curRsc = data[0].resource;
+            $scope.showProfile(uuid,channel,asid,curPop,curFood,curRsc);      
+        });
+        
       });
       
   };
 
-  $scope.showProfile = function(uuid,channel,specID){
+  $scope.showProfile = function(uuid,channel,specID,curPop,curFood,curRsc){
     var ref = firebase.database().ref('species');
     var data= $firebaseArray(ref);
     var dataisi = {};
 
     data.$loaded().then(function() {
         $scope.itemDetail = data[specID];
-        $scope.Pop += data[specID].stats.population;
-        $scope.Food += data[specID].stats.food;
-        $scope.Rsc += data[specID].stats.resource;
-        console.log($scope.Pop);
+        $scope.Pop += parseInt(data[specID].stats.population);
+        $scope.Food += parseInt(data[specID].stats.food);
+        $scope.Rsc += parseInt(data[specID].stats.resource);
+
+        $scope.globalPop = curPop+parseInt($scope.Pop);
+        $scope.globalFood = curFood+parseInt($scope.Food);
+        $scope.globalRsc = curRsc+parseInt($scope.Rsc);
+
+        console.log(curPop);
+        console.log($scope.globalPop);
+        console.log(curFood);
+        console.log($scope.globalFood);
+
+        firebase.database().ref('gameChannel').child(channel+'/players/player-screen').update({
+          'globalStats/population':$scope.globalPop,
+          'globalStats/food':$scope.globalFood,
+          'globalStats/resource':$scope.globalRsc
+        });
+
         dataisi = data[specID];
         firebase.database().ref('gameChannel').child(channel+'/players/player-' + uuid).update({
            'species/class' : dataisi.class,
@@ -413,6 +503,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
   $scope.finishMotion = function(){
 
     $scope.speciesVal+=1;
+    var ref = firebase.database().ref('gameChannel/'+$scope.channel+'/players/player-screen');
+    var data= $firebaseArray(ref);
+    data.$loaded().then(function(){
+        console.log(data);
+        $scope.showPop = data[0].population;
+        $scope.showFood = data[0].food;
+        $scope.showRsc = data[0].resource;
+    });
     // turn session = if both players are ready
     $scope.turnSession = false;
     $scope.totalInfluences = 0;
