@@ -42,10 +42,10 @@
 
 				<p ng-hide="votingStatus">Voting process ....</p>
 				<div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 1</p>
+                      <p>Motion 1: {{motion[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion[2].$value}}</li>
-                        <li>Type: {{motion[3].$value}}</li>
+                        <li>Topic: {{motion[3].$value}}</li>
+                        <li>Type: {{motion[4].$value}}</li>
                       </ul>
                       <ul>
                         <li ng-hide="effects.population==0">Population: {{motion[0].population}}</li>
@@ -58,10 +58,10 @@
                     <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences}})</span> </p>
                 </div>
                 <div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 2</p>
+                      <p>Motion 2: {{motion2[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion2[2].$value}}</li>
-                        <li>Type: {{motion2[3].$value}}</li>
+                        <li>Topic: {{motion2[3].$value}}</li>
+                        <li>Type: {{motion2[4].$value}}</li>
                       </ul>
                       <ul>
                         <li ng-hide="effects.population==0">Population: {{motion2[0].population}}</li>
@@ -71,7 +71,7 @@
                       <strong>Influence Required: {{motion2[0].influence_required}}</strong>
                 </div>
                  <div class="flex-1">
-	                 <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences2}})</span> </p>
+	                 <p ng-show="votingStatus"> {{motionStatus2}} (Influence spent: <span>{{totalInfluences2}})</span> </p>
 	             </div>
 			</div>
 		</div>
