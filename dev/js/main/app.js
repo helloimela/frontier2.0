@@ -300,12 +300,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
         $scope.influences = $scope.influences + 1;
        } else {
         console.log('Not enough influence! Current value '+ $scope.myInfluence);
+        alert('Not enough influence!');
        }
      } else if (motion == 2) {
          if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2+1)) {
           $scope.influences2 = $scope.influences2 + 1;
          } else {
           console.log('Not enough influence! Current value '+ $scope.myInfluence);
+          alert('Not enough influence!');
          }
      }
 
@@ -317,12 +319,14 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
         $scope.influences = $scope.influences - 1;
        } else {
         console.log('Not enough influence! Current value '+ $scope.myInfluence);
+        alert('Not enough influence!');
        }
      } else if (motion == 2) {
          if ($scope.myInfluence >= Math.abs($scope.influences)+Math.abs($scope.influences2-1)) {
           $scope.influences2 = $scope.influences2 - 1;
          } else {
           console.log('Not enough influence! Current value '+ $scope.myInfluence);
+          alert('Not enough influence!');
          }
      }
   };

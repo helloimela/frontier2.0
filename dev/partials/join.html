@@ -1,6 +1,6 @@
 <div class="col-sm-12" ng-controller="GameCtrl">
     <div class="col-sm-12 text-center">
-      <img class="logo-small" src="img/logo1.png">
+      <img class="logo-small" src="graphics/logo.gif">
     </div>
 
      <form ng-hide="joinTrue" ng-submit="joinGame()" class="text-center form-join">
@@ -12,7 +12,7 @@
 
       <div class="box-container flex-container">
         <div class="box flex-container flex-1">
-          <div class="box flex-2 inside-box">a profile picture</div>
+          <div class="box flex-2 inside-box"><img class="species-image" ng-src="{{itemDetail.src}}"></div>
           <div class="box flex-3 inside-box">
             <ul>
               <li>Class: {{itemDetail.class}}</li>
@@ -52,6 +52,7 @@
                   <span>Food: {{itemDetail.stats.food}}</span>
                 </div>
                 <!-- <div class="flex-1">nav</div> -->
+
               </div>
             </div>
           </div>
