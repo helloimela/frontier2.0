@@ -441,7 +441,7 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     }
 
     var refmot1 = firebase.database().ref('motions/motion-'+mot1);
-    var refmot2 = firebase.database().ref('motions/motion-'+mot1);
+    var refmot2 = firebase.database().ref('motions/motion-'+mot2);
     var datamotion1= $firebaseArray(refmot1);
     var datamotion2= $firebaseArray(refmot2);
 
@@ -486,11 +486,45 @@ app.controller('GameCtrl',['$rootScope','$scope','Pubnub','$firebaseArray',funct
     $scope.totalInfluences2+=parseInt(num2);
     if ($scope.totalInfluences>=$scope.motion[0].influence_required) {
       $scope.motionStatus = 'PASSED!';
+      $scope.valFood = parseInt($scope.motion[0].food);
+      $scope.valPop = parseInt($scope.motion[0].population);
+      $scope.valRsc = parseInt($scope.motion[0].resource);
+
+      $scope.addValFood = $scope.showFood + $scope.valFood;
+      $scope.addValPop = $scope.showPop + $scope.valPop;
+      $scope.addValRsc = $scope.showRsc + $scope.valRsc;
+
+      console.log('showFood: '+$scope.showFood);
+      console.log('showPop: '+$scope.showPop);
+      console.log('showRsc: '+$scope.showRsc);
+      console.log('addValFood: '+$scope.addValFood);
+      console.log('addValPop: '+$scope.addValPop);
+      console.log('addValRsc: '+$scope.addValRsc);
+
+      firebase.database().ref('gameChannel').child($scope.channel+'/players/player-screen').update({
+        'globalStats/population':$scope.addValPop,
+        'globalStats/food':$scope.globalFood,
+        'globalStats/resource':$scope.globalRsc
+      });
+
     } else {
       $scope.motionStatus = 'FAILED!';
     }
     if ($scope.totalInfluences2>=$scope.motion2[0].influence_required) {
       $scope.motionStatus2 = 'PASSED!';
+      $scope.valFood = parseInt($scope.motion2[0].food);
+      $scope.valPop = parseInt($scope.motion2[0].population);
+      $scope.valRsc = parseInt($scope.motion2[0].resource);
+
+      $scope.addValFood = $scope.showFood + $scope.valFood;
+      $scope.addValPop = $scope.showPop + $scope.valPop;
+      $scope.addValRsc = $scope.showRsc + $scope.valRsc;
+
+      firebase.database().ref('gameChannel').child($scope.channel+'/players/player-screen').update({
+        'globalStats/population':$scope.addValPop,
+        'globalStats/food':$scope.globalFood,
+        'globalStats/resource':$scope.globalRsc
+      });
     } else {
       $scope.motionStatus2 = 'FAILED!';
     }
