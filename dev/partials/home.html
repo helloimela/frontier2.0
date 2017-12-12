@@ -18,18 +18,21 @@
 				<p ng-if="presences.length>0&&presences.length<=3">{{presences.length-1}} players online</p>
 			</div>
 
-			<div class="col-sm-12" ng-show="presences.length==3">
-				<p>Show Global Data</p>
-				<p>Species Value: </p>
-				<ul>
+			<!-- <div class="col-sm-12" ng-show="presences.length==3"> -->
+			<div class="col-sm-12">
+				<p>Global Status of our planet</p>
+				<ul class="player-stats">
 					<li>
-						<p>Population: {{showPop}}</p>
+						<span><img src="img/icon_population.png"></span>
+						<span>Population: {{showPop}}</span>
 					</li>
 					<li>
-						<p>Food: {{showFood}}</p>
+						<span><img src="img/icon_food.png"></span>
+						<span>Food: {{showFood}}</span>
 					</li>
 					<li>
-						<p>Resource: {{showRsc}}</p>
+						<span><img src="img/icon_resource.png"></span>
+						<span>Resource: {{showRsc}}</span>
 					</li>
 				</ul>
 			</div>
@@ -42,10 +45,10 @@
 
 				<p ng-hide="votingStatus">Voting process ....</p>
 				<div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 1</p>
+                      <p>{{motion[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion[2].$value}}</li>
-                        <li>Type: {{motion[3].$value}}</li>
+                        <li>Topic: {{motion[3].$value}}</li>
+                        <li>Type: {{motion[4].$value}}</li>
                       </ul>
                       <ul>
                         <li ng-hide="effects.population==0">Population: {{motion[0].population}}</li>
@@ -58,10 +61,10 @@
                     <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences}})</span> </p>
                 </div>
                 <div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 2</p>
+                      <p>{{motion2[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion2[2].$value}}</li>
-                        <li>Type: {{motion2[3].$value}}</li>
+                        <li>Topic: {{motion2[3].$value}}</li>
+                        <li>Type: {{motion2[4].$value}}</li>
                       </ul>
                       <ul>
                         <li ng-hide="effects.population==0">Population: {{motion2[0].population}}</li>
@@ -71,7 +74,7 @@
                       <strong>Influence Required: {{motion2[0].influence_required}}</strong>
                 </div>
                  <div class="flex-1">
-	                 <p ng-show="votingStatus"> {{motionStatus}} (Influence spent: <span>{{totalInfluences2}})</span> </p>
+	                 <p ng-show="votingStatus"> {{motionStatus2}} (Influence spent: <span>{{totalInfluences2}})</span> </p>
 	             </div>
 			</div>
 		</div>

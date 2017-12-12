@@ -85,15 +85,24 @@
 
                 <div class="flex-container flex-0 prop-box">
                   <div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 1</p>
+                      <p>{{motion[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion[2].$value}}</li>
-                        <li>Type: {{motion[3].$value}}</li>
+                        <li>Topic: {{motion[3].$value}}</li>
+                        <li>Type: {{motion[4].$value}}</li>
                       </ul>
-                      <ul>
-                        <li ng-hide="effects.population==0">Population: {{motion[0].population}}</li>
-                        <li ng-hide="effects.resource==0">Resource: {{motion[0].resource}}</li>
-                        <li ng-hide="effects.food==0">Food: {{motion[0].food}}</li>
+                      <ul class="player-stats">
+                        <li ng-hide="effects.population==0">
+                            <span><img src="img/icon_population.png"></span>
+                            <span>Population: {{motion[0].population}}</span>
+                        </li>
+                        <li ng-hide="effects.resource==0">
+                          <span><img src="img/icon_resource.png"></span>
+                          <span>Resource: {{motion[0].resource}}</span>
+                        </li>
+                        <li ng-hide="effects.food==0">
+                          <span><img src="img/icon_food.png"></span>
+                          <span>Food: {{motion[0].food}}</span>
+                        </li>
                       </ul>
                       <strong>Influence Required: {{motion[0].influence_required}}</strong>
                   </div>
@@ -105,15 +114,24 @@
                 </div>
                 <div class="flex-container flex-0 prop-box">
                   <div class="box flex-5 inside-box inside-no-corner">
-                      <p>Motion 2</p>
+                      <p>{{motion2[2].$value}}</p>
                       <ul>
-                        <li>Topic: {{motion2[2].$value}}</li>
-                        <li>Type: {{motion2[3].$value}}</li>
+                        <li>Topic: {{motion2[3].$value}}</li>
+                        <li>Type: {{motion2[4].$value}}</li>
                       </ul>
-                      <ul>
-                        <li ng-hide="effects.population==0">Population: {{motion2[0].population}}</li>
-                        <li ng-hide="effects.resource==0">Resource: {{motion2[0].resource}}</li>
-                        <li ng-hide="effects.food==0">Food: {{motion2[0].food}}</li>
+                      <ul class="player-stats">
+                        <li ng-hide="effects.population==0">
+                          <span><img src="img/icon_population.png"></span>
+                          <span>Population: {{motion2[0].population}}</span>
+                        </li>
+                        <li ng-hide="effects.resource==0">
+                          <span><img src="img/icon_resource.png"></span>
+                          <span>Resource: {{motion2[0].resource}}</span>
+                        </li>
+                        <li ng-hide="effects.food==0">
+                          <span><img src="img/icon_food.png"></span>
+                          <span>Food: {{motion2[0].food}}</span>
+                        </li>
                       </ul>
                       <strong>Influence Required: {{motion2[0].influence_required}}</strong>
                   </div>
